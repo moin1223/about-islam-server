@@ -3,6 +3,7 @@ const app = express()
 const cors =require('cors');
 const bobyParser = require('body-parser');
 const { MongoClient } = require('mongodb');
+const ObjectId = require('mongodb').ObjectId;
 require('dotenv').config()
 const port = process.env.PORT || 5000;
 app.use(cors());
@@ -30,6 +31,14 @@ client.connect(err => {
       })
 
   })
+
+  app.get('/blog/:id', (req, res) => {
+    blogCollection.find({_id:ObjectId(req.params.id)})
+        .toArray((err, documents) => {
+            res.send(documents[0]);
+        })
+  })
+  
 
   app.post('/addBlog',(req,res)=>{
       
